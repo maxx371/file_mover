@@ -1,10 +1,9 @@
-const fs = require("fs");
-
 // module params /
-
 const inputDirPath = "./samples/";
 const outputDirPath = "./output/";
-const threadNum = 4;
+const threadNum = 4; //number of file buckets
+
+const fs = require("fs");
 
 // reads files and their size from input dir
 const readFilesStat = (inputDir) => {
@@ -41,8 +40,8 @@ const distributeFiles = (ordFiles, threadN) => {
   for (let i = 0; i < threadN; i += 1)
     bucketArr.push({ bucketSize: 0, files: [] });
 
-  console.log(`Created ${bucketArr.length} buckets`);
-  console.log(bucketArr);
+  //console.log(`Created ${bucketArr.length} buckets`);
+  //console.log(bucketArr);
 
   //find a bucket for a specific file
   const getBucketNum = (fileO) => {
@@ -101,27 +100,5 @@ const processFiles = (inputDir, outputDir, threadN) => {
 console.log(`start directory ${inputDirPath}`);
 
 processFiles(inputDirPath, outputDirPath, threadNum);
-/*
-distributeFiles(readFilesStat(inputDirPath)).forEach((bucket, ind) => {
-  if (bucket.files.length > 0) {
-    console.log(`staring ${ind} stream`);
-  }
-  bucket.readStream = fs.ReadStream(inputDirPath);
 
-  streamRead.on("readable", function() {
-    let data = streamRead.read();
-    if (data !== null) {
-      console.log(data); // фрагмент данных в виде буфера
-      if (data !== null) {
-        console.log(data.length); // длина прочитанного фрагмента файла
-        console.log(data.toString()); // преобразование данных с буфера в строку
-      }
-    }
-  });
-
-  streamRead.on("end", () => {
-    console.log(`The end of ${ind}`);
-  });
-});
-*/
 console.log("end");
