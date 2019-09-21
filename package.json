@@ -1,0 +1,16 @@
+{
+  "name": "files_mover",
+  "version": "1.0.0",
+  "description": "",
+  "main": "files_mover.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "fs": "0.0.1-security",
+    "eslint": "^6.4.0"
+  }
+}
