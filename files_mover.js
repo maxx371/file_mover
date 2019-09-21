@@ -101,27 +101,5 @@ const processFiles = (inputDir, outputDir, threadN) => {
 console.log(`start directory ${inputDirPath}`);
 
 processFiles(inputDirPath, outputDirPath, threadNum);
-/*
-distributeFiles(readFilesStat(inputDirPath)).forEach((bucket, ind) => {
-  if (bucket.files.length > 0) {
-    console.log(`staring ${ind} stream`);
-  }
-  bucket.readStream = fs.ReadStream(inputDirPath);
 
-  streamRead.on("readable", function() {
-    let data = streamRead.read();
-    if (data !== null) {
-      console.log(data); // фрагмент данных в виде буфера
-      if (data !== null) {
-        console.log(data.length); // длина прочитанного фрагмента файла
-        console.log(data.toString()); // преобразование данных с буфера в строку
-      }
-    }
-  });
-
-  streamRead.on("end", () => {
-    console.log(`The end of ${ind}`);
-  });
-});
-*/
 console.log("end");
