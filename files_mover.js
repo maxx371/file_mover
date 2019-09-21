@@ -4,7 +4,7 @@ const fs = require("fs");
 
 const inputDirPath = "./samples/";
 const outputDirPath = "./output/";
-const threadNum = 4;
+const threadNum = 8;
 
 // reads files and their size from input dir
 const readFilesStat = (inputDir) => {
@@ -99,7 +99,6 @@ const processFiles = (inputDir, outputDir, threadN) => {
         });
 
         str.on("end", () => {
-          //console.log(`${fileEl} file's copied `);
           ++fileCount;
           if (fileCount == buck.files.length) {
             buck.writeStream.end();
