@@ -1,5 +1,5 @@
 File_mover
-Function processFiles copies file from input folder to given number of subfolders of output folder
+Function processFiles combines file from input folder to given number files in output folder and uses the same number of threads.
 
 Installation
 
