@@ -83,22 +83,29 @@ const processFiles = (inputDir, outputDir, threadN) => {
   let buckets = distributeFiles(readFilesStat(inputDir), threadN);
 
   buckets.forEach((buck, ind) => {
-    if (!fs.existsSync(outputDir + "/" + ind))
-      fs.mkdirSync(outputDir + "/" + ind);
+    buck.writeStream = fs.createWriteStream(`${outputDir}/${ind}.txt`);
 
     console.log(`starting ${ind} bucket`);
 
-    buck.files.forEach((fileEx) => {
-      //console.log(`copying ${fileEx}`);
-      fs.copyFile(inputDir + fileEx, outputDir + `${ind}/` + fileEx, (err) => {
-        if (err) throw err;
-        console.log(`copied ${fileEx}`);
+    buck.files.forEach((fileEl, findx) => {
+      let str = fs.createReadStream(inputDir + fileEl);
+
+      str.on("data", (data) => {
+        buck.writeStream.write(data);
+      });
+
+      str.on("end", () => {
+        //console.log(`${fileEl} file's copied `);
+        if (ind == buckets.length - 1 && findx == buck.files.length - 1) {
+          //          buckets.forEach((buc) => buc.writeStream.end());
+          console.log("All files are done! Bye");
+        }
       });
     });
   });
 };
 
-console.log(`start directory ${inputDirPath}`);
+console.log(`processing directory ${inputDirPath}`);
 
 processFiles(inputDirPath, outputDirPath, threadNum);
 
