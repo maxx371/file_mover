@@ -75,11 +75,13 @@ const distributeFiles = (ordFiles, threadN) => {
   return bucketArr;
 };
 
-// process file
+// processes files
 const processFiles = (inputDir, outputDir, threadN) => {
+  // essential checks
   if (!fs.existsSync(inputDir)) throw new Error("Can't find input directory");
   if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir);
 
+  // get buckets array
   let buckets = distributeFiles(readFilesStat(inputDir), threadN);
 
   buckets.forEach((buck, ind) => {
@@ -87,19 +89,23 @@ const processFiles = (inputDir, outputDir, threadN) => {
 
     console.log(`starting ${ind} bucket`);
 
-    buck.files.forEach((fileEl, findx) => {
-      let str = fs.createReadStream(inputDir + fileEl);
+    buck.writeStream.on("ready", () => {
+      let fileCount = 0;
+      buck.files.forEach((fileEl) => {
+        let str = fs.createReadStream(inputDir + fileEl);
 
-      str.on("data", (data) => {
-        buck.writeStream.write(data);
-      });
+        str.on("data", (data) => {
+          buck.writeStream.write(data);
+        });
 
-      str.on("end", () => {
-        //console.log(`${fileEl} file's copied `);
-        if (ind == buckets.length - 1 && findx == buck.files.length - 1) {
-          //          buckets.forEach((buc) => buc.writeStream.end());
-          console.log("All files are done! Bye");
-        }
+        str.on("end", () => {
+          //console.log(`${fileEl} file's copied `);
+          ++fileCount;
+          if (fileCount == buck.files.length) {
+            buck.writeStream.end();
+            console.log(`Bucket ${ind} done`);
+          }
+        });
       });
     });
   });
